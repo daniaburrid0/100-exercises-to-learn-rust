@@ -5,9 +5,37 @@ use ticket_fields::{TicketDescription, TicketTitle};
 //  it contains using a `for` loop.
 //
 // Hint: you shouldn't have to implement the `Iterator` trait in this case.
+
 #[derive(Clone)]
 pub struct TicketStore {
     tickets: Vec<Ticket>,
+}
+
+pub struct TicketStoreIterator {
+    tickets: Vec<Ticket>,
+}
+
+impl Iterator for TicketStoreIterator {
+    type Item = Ticket;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.tickets.is_empty() {
+            None
+        } else {
+            Some(self.tickets.remove(0))
+        }
+    }
+}
+
+impl IntoIterator for TicketStore {
+    type Item = Ticket;
+    type IntoIter = TicketStoreIterator;
+
+    fn into_iter(self) -> Self::IntoIter {
+        TicketStoreIterator {
+            tickets: self.tickets,
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
